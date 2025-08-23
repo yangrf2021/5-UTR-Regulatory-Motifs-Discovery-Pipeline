@@ -20,6 +20,40 @@ src/
 └── run_analysis.py            # Main execution script
 
 🚀 **Installation**
+Prerequisites：Python 3.7+
+CUDA-capable GPU (optional, for faster parallel processing)
+
+Dependencies：pip install -r requirements.txt
+
+📊 **Input Data Format**
+Required Files：
+1. te_up_utr.fasta - 5'UTR sequences of translationally upregulated genes
+2. te_down_utr.fasta - 5'UTR sequences of translationally downregulated genes
+
+FASTA Format Example：>GENE_ID | Selection: Longest_UTR | Additional_Info
+ATGGCGCACGNNNCCTGATCG...
+
+🔧 **Usage**
+Basic Usage：python src/run_analysis.py
+
+Advanced Usage with Custom Parameters：python src/run_analysis.py \
+    --max-utr-length 500 \
+    --min-frequency 0.05 \
+    --fold-change 1.5 \
+    --min-occur-freq 0.1 \
+    --max-wildcards 1 \
+    --max-mismatches 1 \
+    --enable-gapped \
+    --enable-pwm \
+    --enable-structural \
+    --min-length 4 \
+    --max-length 8 \
+    --n-cores 8 \
+    --seed 42
+
+
+
+
 
 
 
@@ -108,7 +142,7 @@ Thanks to all contributors and collaborators
 Supported by [Grant Numbers]
 Computational resources provided by [Institution]
 
-⚠️ Disclaimer
+⚠️ **Disclaimer**
 This software is for research purposes only. Clinical applications require additional validation.
 
 Last Updated: January 2025
