@@ -25,7 +25,7 @@
 This repository contains a comprehensive computational framework for discovering and analyzing 5'UTR regulatory motifs that control mRNA translation efficiency. The pipeline was specifically developed to identify sequence elements regulated by METTL5-mediated 18S rRNA methylation in prostate cancer, but can be applied to any translational regulation study.
 
 ### Key Discovery
-Our pipeline successfully identified the **GCACGN{1,5}CC** motif as a critical regulatory element in 5'UTRs of genes whose translation is controlled by METTL5-mediated rRNA methylation.
+Our pipeline successfully identified the **GCACGN{2,4}CC** motif as a critical regulatory element in 5'UTRs of genes whose translation is controlled by METTL5-mediated rRNA methylation.
 
 ## Scientific Background
 
@@ -82,7 +82,7 @@ METTL5 is an RNA methyltransferase that catalyzes N6-methyladenosine (m6A) modif
 
 ### Step 1: Clone Repository
 ```bash
-git clone https://github.com:yangrf2021/5-UTR-Regulatory-Motifs-Discovery-Pipeline.git
+git clone https://github.com/yangrf2021/5-UTR-Regulatory-Motifs-Discovery-Pipeline.git
 ```
 
 ### Step 2: Create Virtual Environment (Recommended)
@@ -441,7 +441,7 @@ We welcome contributions! Please follow these steps:
 - Email: yangrf1996@163.com
 
 **Technical Support**
-- GitHub Issues: [Create Issue](https://github.com:yangrf2021/5-UTR-Regulatory-Motifs-Discovery/issues)
+- GitHub Issues: [Create Issue](https://github.com/yangrf2021/5-UTR-Regulatory-Motifs-Discovery/issues)
 - Email: yangrf1996@163.com
 
 ## License
@@ -517,4 +517,4 @@ This software is provided for research purposes only. Any clinical or diagnostic
 **Status**: Active Development
 
 [![Made with Python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com:yangrf2021/5-UTR-Regulatory-Motifs-Discovery/graphs/commit-activity)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/yangrf2021/5-UTR-Regulatory-Motifs-Discovery/graphs/commit-activity)
