@@ -25,7 +25,7 @@
 This repository contains a comprehensive computational framework for discovering and analyzing 5'UTR regulatory motifs that control mRNA translation efficiency. The pipeline was specifically developed to identify sequence elements regulated by METTL5-mediated 18S rRNA methylation in prostate cancer, but can be applied to any translational regulation study.
 
 ### Key Discovery
-Our pipeline successfully identified the **GCACGN{2,4}CC** motif as a critical regulatory element in 5'UTRs of genes whose translation is controlled by METTL5-mediated rRNA methylation.
+Our pipeline successfully identified the **GCACGN{1,5}CC** motif as a critical regulatory element in 5'UTRs of genes whose translation is controlled by METTL5-mediated rRNA methylation.
 
 ## Scientific Background
 
@@ -82,8 +82,7 @@ METTL5 is an RNA methyltransferase that catalyzes N6-methyladenosine (m6A) modif
 
 ### Step 1: Clone Repository
 ```bash
-git clone https://github.com/yourusername/mettl5-motif-discovery.git
-cd mettl5-motif-discovery
+git clone https://github.com:yangrf2021/5-UTR-Regulatory-Motifs-Discovery-Pipeline.git
 ```
 
 ### Step 2: Create Virtual Environment (Recommended)
@@ -95,11 +94,6 @@ source motif_env/bin/activate  # On Windows: motif_env\Scripts\activate
 ### Step 3: Install Dependencies
 ```bash
 pip install -r requirements.txt
-```
-
-### Step 4: Install Package
-```bash
-pip install -e .
 ```
 
 ### Dependencies List
@@ -380,10 +374,10 @@ Results saved in motif_analysis_results/
 
 ### Biological Validation Results
 The discovered GCACGN{2,4}CC motif has been validated through:
-- ??? Dual-luciferase reporter assays
-- ??? Mutation analysis
-- ??? Polysome profiling
-- ??? Clinical sample validation
+- Dual-luciferase reporter assays
+- Mutation analysis
+- Polysome profiling
+- Clinical sample validation
 
 ## Troubleshooting
 
@@ -428,19 +422,7 @@ A:
 
 ## Citation
 
-If you use this pipeline in your research, please cite:
-
-```bibtex
-@article{yang2025mettl5,
-  title={METTL5-mediated 18S rRNA methylation controls translation 
-         of specific mRNAs through 5'UTR motifs in prostate cancer},
-  author={Yang, Ruifeng and [Other Authors]},
-  journal={Nature Metabolism},
-  year={2025},
-  doi={10.1038/xxxxx},
-  note={In preparation}
-}
-```
+This code is associated with a manuscript currently under preparation. Please check back for citation information once published.
 
 ## Contributing
 
@@ -452,30 +434,17 @@ We welcome contributions! Please follow these steps:
 4. Push to branch (`git push origin feature/NewFeature`)
 5. Open a Pull Request
 
-### Development Setup
-```bash
-# Clone your fork
-git clone https://github.com/yourusername/mettl5-motif-discovery.git
-
-# Install in development mode
-pip install -e .[dev]
-
-# Run tests
-pytest tests/
-```
-
 ## Contact
 
 **Principal Investigator**
 - Name: Ruifeng Yang
 - Email: yangrf1996@163.com
-- ORCID: [0000-0000-0000-0000]
 
 **Technical Support**
-- GitHub Issues: [Create Issue](https://github.com/yourusername/mettl5-motif-discovery/issues)
+- GitHub Issues: [Create Issue](https://github.com:yangrf2021/5-UTR-Regulatory-Motifs-Discovery/issues)
 - Email: yangrf1996@163.com
 
-## ???? License
+## License
 
 This project is licensed under the MIT License:
 
@@ -506,8 +475,8 @@ SOFTWARE.
 ## Acknowledgments
 
 - Thanks to all contributors and collaborators
-- Computational resources provided by [Your Institution]
-- Supported by grants: [Grant Numbers]
+- Computational resources provided by Shanghai Ninth People's Hospital
+- Supported by grants: No. 82473192, 82172741
 - Special thanks to the Bioinformatics Core Facility
 
 ## Disclaimer
@@ -529,7 +498,7 @@ This software is provided for research purposes only. Any clinical or diagnostic
   - Statistical analysis framework
   - Visualization suite
   
-- **v0.9.0** (2024-12): Beta version
+- **v0.9.0** (2023-12): Beta version
   - PWM implementation
   - Gapped motif support
 
@@ -548,4 +517,4 @@ This software is provided for research purposes only. Any clinical or diagnostic
 **Status**: Active Development
 
 [![Made with Python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/yourusername/mettl5-motif-discovery/graphs/commit-activity)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com:yangrf2021/5-UTR-Regulatory-Motifs-Discovery/graphs/commit-activity)
