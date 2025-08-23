@@ -37,25 +37,19 @@ ATGGCGCACGNNNCCTGATCG...
 Basic Usage：python src/run_analysis.py
 
 Advanced Usage with Custom Parameters：python src/run_analysis.py \
-    --max-utr-length 500 \
-    --min-frequency 0.05 \
-    --fold-change 1.5 \
-    --min-occur-freq 0.1 \
-    --max-wildcards 1 \
-    --max-mismatches 1 \
-    --enable-gapped \
-    --enable-pwm \
-    --enable-structural \
-    --min-length 4 \
-    --max-length 8 \
-    --n-cores 8 \
+    --max-utr-length 500 \ # Maximum 5'UTR length to analyze
+    --min-frequency 0.05 \ # Minimum frequency threshold for motif selection
+    --fold-change 1.5 \ # Fold change threshold for enrichment
+    --min-occur-freq 0.1 \ # Minimum occurrence frequency for significance
+    --max-wildcards 1 \ # Maximum allowed wildcards in motifs
+    --max-mismatches 1 \ # Maximum allowed mismatches
+    --enable-gapped \ # Enable gapped motif discovery
+    --enable-pwm \ # Enable Position Weight Matrix analysis
+    --enable-structural \ # Enable structural motif analysis
+    --min-length 4 \ # Minimum motif length
+    --max-length 8 \ # Maximum motif length
+    --n-cores 8 \ # Number of CPU cores to use
     --seed 42
-
-
-
-
-
-
 
 📁 **Output Structure**
 motif_analysis_results/
