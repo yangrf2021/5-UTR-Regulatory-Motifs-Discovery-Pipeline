@@ -493,12 +493,12 @@ This software is provided for research purposes only. Any clinical or diagnostic
 
 ## Version History
 
-- **v1.0.0** (2025-01): Initial release
+- **v1.0.0** (2023-06): Initial release
   - Core motif discovery algorithms
   - Statistical analysis framework
   - Visualization suite
   
-- **v0.9.0** (2023-12): Beta version
+- **v0.9.0** (2022-12): Beta version
   - PWM implementation
   - Gapped motif support
 
