@@ -1,520 +1,739 @@
-# METTL5-mediated Translation Control Motif Discovery Pipeline
+# 5'UTR Regulatory Motif Discovery Pipeline for METTL5-mediated Translation Control
 
 [![Python](https://img.shields.io/badge/Python-3.7%2B-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![DOI](https://img.shields.io/badge/DOI-pending-orange)](https://doi.org/)
-[![GitHub Stars](https://img.shields.io/github/stars/yourusername/mettl5-motif-discovery?style=social)](https://github.com/yourusername/mettl5-motif-discovery)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/yangrf2021/5-UTR-Regulatory-Motifs-Discovery-Pipeline)
 
 ## Table of Contents
-- [Overview](#-overview)
-- [Scientific Background](#-scientific-background)
-- [Key Features](#-key-features)
-- [Installation](#-installation)
-- [Quick Start](#-quick-start)
-- [Detailed Usage](#-detailed-usage)
-- [Input Data Format](#-input-data-format)
-- [Output Description](#-output-description)
-- [Algorithm Details](#-algorithm-details)
-- [Example Analysis](#-example-analysis)
-- [Troubleshooting](#-troubleshooting)
-- [Citation](#-citation)
-- [Contact](#-contact)
+- [Overview](#overview)
+- [Scientific Background](#scientific-background)
+- [Key Features](#key-features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Detailed Module Documentation](#detailed-module-documentation)
+- [Algorithm Workflow](#algorithm-workflow)
+- [Input Requirements](#input-requirements)
+- [Output Description](#output-description)
+- [Parameter Configuration](#parameter-configuration)
+- [Example Usage](#example-usage)
+- [Troubleshooting](#troubleshooting)
+- [Performance Considerations](#performance-considerations)
+- [Citation](#citation)
+- [Contact](#contact)
 
 ## Overview
 
-This repository contains a comprehensive computational framework for discovering and analyzing 5'UTR regulatory motifs that control mRNA translation efficiency. The pipeline was specifically developed to identify sequence elements regulated by METTL5-mediated 18S rRNA methylation in prostate cancer, but can be applied to any translational regulation study.
+This repository contains a comprehensive bioinformatics pipeline for discovering and analyzing 5'UTR regulatory motifs that control mRNA translation efficiency. The pipeline was specifically developed to identify sequence elements regulated by METTL5-mediated 18S rRNA methylation, ultimately revealing the **GCACGN{2,4}CC** motif as a critical regulatory element in prostate cancer, but can be applied to any translational regulation study.
 
-### Key Discovery
-Our pipeline successfully identified the **GCACGN{2,4}CC** motif as a critical regulatory element in 5'UTRs of genes whose translation is controlled by METTL5-mediated rRNA methylation.
+### Core Discovery
+Our pipeline successfully identified that METTL5-mediated 18S rRNA m6A modification at position 1832 selectively regulates the translation of mRNAs containing specific 5'UTR motifs, particularly affecting mitochondrial metabolism genes through the METTL5/IRF7/DNA2 axis.
 
 ## Scientific Background
 
-METTL5 is an RNA methyltransferase that catalyzes N6-methyladenosine (m6A) modification at position 1832 of 18S ribosomal RNA. This modification plays a crucial role in:
+### METTL5 and rRNA Methylation
+METTL5 (Methyltransferase Like 5) is an RNA methyltransferase that catalyzes N6-methyladenosine (m6A) modification at position 1832 of 18S ribosomal RNA. This modification:
+- Affects ribosome assembly and function
+- Selectively regulates mRNA translation efficiency
+- Shows upregulation in various cancers
+- Correlates with poor prognosis in prostate cancer
 
-- **Cancer Progression**: METTL5 is upregulated in prostate cancer and correlates with poor prognosis
-- **Metabolic Regulation**: Controls mitochondrial oxidative phosphorylation
-- **Selective Translation**: Regulates specific mRNAs through 5'UTR motifs
-- **Molecular Axis**: Functions through the METTL5/IRF7/DNA2 regulatory pathway
+### Translation Control Mechanism
+The pipeline identifies how rRNA methylation leads to selective translation through:
+1. **Ribosome Specialization**: Modified ribosomes show preference for specific mRNA features
+2. **5'UTR Recognition**: Certain sequence motifs in 5'UTRs are preferentially translated
+3. **Metabolic Reprogramming**: Affects mitochondrial gene expression and OXPHOS
+4. **Cancer Progression**: Promotes tumor growth through metabolic adaptation
 
 ## Key Features
 
-### Motif Discovery Capabilities
-- **Multiple Algorithm Support**
-  - Exact k-mer matching
-  - IUPAC wildcard patterns (R, Y, M, K, S, W, H, B, V, D, N)
-  - Gapped motif discovery (e.g., GCACGN{2,4}CC)
-  - Position Weight Matrix (PWM) analysis
-  - Mismatch-tolerant searching
+### 1. Multi-Strategy Motif Discovery
+- **Exact k-mer matching**: Traditional sequence counting
+- **IUPAC wildcard patterns**: Support for degenerate nucleotides
+- **Mismatch tolerance**: Allow specified number of mismatches
+- **Gapped motifs**: Discover patterns with variable-length gaps
+- **Position Weight Matrix (PWM)**: Probabilistic sequence matching
+- **Hybrid approaches**: PWM with gaps for complex patterns
 
-### Statistical Analysis
-- **Enrichment Metrics**
-  - UP/DOWN regulation ratios
-  - Fold change calculations
-  - Frequency analysis
-- **Statistical Tests**
-  - Fisher's exact test
-  - Hypergeometric test
-  - Binomial test for strand specificity
-- **Strand Specificity Analysis**
-  - RNA vs DNA-level regulation detection
-  - Reverse complement comparison
+### 2. Statistical Analysis Suite
+- Enrichment ratio calculation (UP/DOWN regulation)
+- Fisher's exact test for contingency tables
+- Hypergeometric test for overrepresentation
+- Binomial test for strand specificity
+- Multiple testing correction (Bonferroni/FDR)
 
-### Visualization Suite
-- Frequency distribution plots
-- Enrichment scatter plots
-- Strand specificity analysis
-- Motif similarity networks
-- Heatmaps of significant motifs
-
-### Performance Features
-- Parallel processing with multiprocessing
-- Optimized for large-scale genomic data
-- Memory-efficient sequence handling
-- Configurable CPU core usage
+### 3. Advanced Features
+- Parallel processing for large-scale analysis
+- Transcript isoform selection tracking (MANE annotations)
+- RNA secondary structure prediction (stem-loops, G-quadruplexes)
+- Motif clustering based on sequence similarity
+- Comprehensive visualization suite
 
 ## Installation
 
 ### System Requirements
 - **Operating System**: Linux, macOS, or Windows
 - **Python**: 3.7 or higher
-- **Memory**: Minimum 8GB RAM (16GB recommended)
-- **Storage**: 10GB free space for analysis outputs
+- **Memory**: Minimum 8GB RAM (16GB recommended for large datasets)
+- **CPU**: Multi-core processor recommended for parallel processing
 
-### Step 1: Clone Repository
+### Dependencies
+```bash
+# Core dependencies
+pip install pandas numpy biopython scipy matplotlib seaborn tqdm networkx
+
+# Optional dependencies for RNA structure prediction
+# Via pip:
+pip install ViennaRNA
+
+# Via conda (recommended):
+conda install -c bioconda viennarna
+```
+
+### Clone Repository
 ```bash
 git clone https://github.com/yangrf2021/5-UTR-Regulatory-Motifs-Discovery-Pipeline.git
 ```
 
-### Step 2: Create Virtual Environment (Recommended)
-```bash
-python -m venv motif_env
-source motif_env/bin/activate  # On Windows: motif_env\Scripts\activate
-```
-
-### Step 3: Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### Dependencies List
-```python
-pandas>=1.3.0
-numpy>=1.20.0
-biopython>=1.79
-scipy>=1.7.0
-matplotlib>=3.4.0
-seaborn>=0.11.0
-networkx>=2.6
-tqdm>=4.62.0
-multiprocessing
-```
-
 ## Quick Start
 
-### Basic Analysis
+### 1. Prepare Input Files
+Place two FASTA files in the working directory:
+- `te_up_utr.fasta`: 5'UTR sequences of translationally upregulated genes
+- `te_down_utr.fasta`: 5'UTR sequences of translationally downregulated genes
+
+### 2. Run Analysis
 ```bash
-# Run with default parameters
-python src/run_analysis.py
+python sequence-analysis.py
 ```
 
-### Custom Analysis
-```bash
-# Run with custom parameters
-python src/run_analysis.py \
-    --max-utr-length 500 \
-    --min-frequency 0.05 \
-    --fold-change 1.5 \
-    --enable-gapped \
-    --enable-pwm
+### 3. Check Results
+Results will be generated in `motif_results_length_*` directories.
+
+## Detailed Module Documentation
+
+### Core Classes
+
+#### `MotifAnalyzer`
+Main class orchestrating the entire analysis pipeline.
+
+**Key Attributes:**
+- `up_sequences`: Dictionary storing upregulated gene sequences
+- `down_sequences`: Dictionary storing downregulated gene sequences
+- `max_utr_length`: Maximum 5'UTR length to analyze (default: 500nt)
+- `min_frequency`: Minimum frequency threshold for initial filtering
+- `fold_change_threshold`: Minimum enrichment ratio for significance
+- `min_occur_freq`: Minimum occurrence frequency in gene set
+
+**Key Methods:**
+- `load_sequences()`: Load and preprocess FASTA files
+- `analyze_single_length()`: Analyze motifs of specific length
+- `find_motifs()`: Core motif discovery algorithm
+- `process_enriched_motifs()`: Cluster and analyze significant motifs
+
+### Sequence Processing Functions
+
+#### `get_matched_sequences()`
+Find all sequences matching a given pattern.
+
+**Parameters:**
+- `pattern`: Target pattern (supports IUPAC wildcards)
+- `sequences`: Dictionary of sequences to search
+- `max_mismatches`: Maximum allowed mismatches (default: 0)
+- `gap_pattern`: Optional gap pattern format (e.g., "GAG{2,4}GG")
+
+**Returns:**
+- `matches`: List of matching sequences
+- `match_positions`: List of (gene_id, position) tuples
+- `mismatch_details`: Detailed mismatch information
+
+#### `calculate_position_frequencies()`
+Calculate nucleotide frequencies at each position of matched sequences.
+
+**Purpose:** Build Position Weight Matrix (PWM) for motif representation
+
+**Returns:** DataFrame with position-specific nucleotide frequencies
+
+#### `scan_sequences_with_pwm()`
+Scan sequences using a Position Weight Matrix for flexible matching.
+
+**Parameters:**
+- `pwm`: Position Weight Matrix
+- `sequences`: Target sequences
+- `threshold`: Matching threshold (0-1, default: 0.8)
+
+### Statistical Analysis Functions
+
+#### `calculate_strand_specificity()`
+Determine if a motif shows strand preference (RNA vs DNA-level regulation).
+
+**Interpretation:**
+- Ratio ≈ 1: No strand preference (likely DNA-level)
+- Ratio > 2: Strong forward strand preference (likely RNA-level)
+- Ratio < 0.5: Reverse strand preference
+
+**Returns:** (specificity_ratio, p_value)
+
+#### `calculate_enrichment_statistics()`
+Comprehensive statistical analysis of motif enrichment.
+
+**Calculates:**
+- Frequency in each gene set
+- Fold change ratios
+- Fisher's exact test p-value
+- Odds ratio
+- Hypergeometric test p-value
+
+### Motif Discovery Functions
+
+#### `process_sequence_chunk()`
+Process a chunk of sequences for parallel motif discovery.
+
+**Workflow:**
+1. Extract all exact k-mers
+2. Filter by minimum frequency
+3. Generate wildcard variants
+4. Test mismatch patterns
+5. Explore gapped configurations
+6. Apply PWM analysis
+7. Combine PWM with gaps
+
+#### `find_motifs()`
+Main motif discovery orchestrator with parallel processing.
+
+**Features:**
+- Automatic CPU core detection
+- Progress bar with tqdm
+- Memory-efficient chunking
+- Result aggregation across chunks
+
+### Clustering and Analysis
+
+#### `cluster_similar_motifs()`
+Group similar motifs to reduce redundancy.
+
+**Algorithm:**
+- Similarity based on position-wise nucleotide matching
+- Handles special formats (gaps, mismatches, PWM)
+- Hierarchical clustering approach
+- Customizable similarity threshold
+
+#### `calculate_and_save_pattern_info()`
+Generate comprehensive analysis report for each significant motif.
+
+**Outputs:**
+- Position frequency matrix
+- Strand specificity analysis
+- Gene list with motif
+- Transcript type distribution
+- Structural correlation (if enabled)
+- Position distribution plots
+
+### Visualization Functions
+
+#### `create_visualizations()`
+Generate comprehensive visualization suite.
+
+**Plots Generated:**
+1. **Frequency Distribution**: Histogram of motif frequencies
+2. **Enrichment Scatter**: Frequency vs fold change
+3. **Strand Specificity**: Distribution of strand bias
+4. **Significant Heatmap**: Top motifs visualization
+5. **Position Distribution**: Motif location in 5'UTRs
+6. **Motif Type Analysis**: Distribution by discovery method
+7. **Transcript Type Correlation**: MANE selection analysis
+
+### Structural Motif Analysis
+
+#### `find_structural_motifs()`
+Identify potential RNA secondary structures.
+
+**Detects:**
+- Stem-loop structures
+- Minimum stem length: 4nt
+- Maximum loop size: 8nt
+- Requires complementary base pairing
+
+#### `find_g_quadruplexes()`
+Detect potential G-quadruplex forming sequences.
+
+**Pattern:** (G{3,5}[ACGT]{1,7}){3,}G{3,5}
+
+**Biological Relevance:** G-quadruplexes can affect translation efficiency
+
+## Algorithm Workflow
+
+```
+1. SEQUENCE LOADING
+   ├── Parse FASTA files
+   ├── Truncate to max UTR length
+   └── Extract transcript metadata
+
+2. MOTIF DISCOVERY (per length)
+   ├── K-mer extraction
+   ├── Frequency filtering
+   ├── Pattern expansion
+   │   ├── Wildcard generation
+   │   ├── Mismatch variants
+   │   ├── Gapped patterns
+   │   └── PWM scoring
+   └── Parallel processing
+
+3. STATISTICAL ANALYSIS
+   ├── Calculate frequencies
+   ├── Compute enrichment ratios
+   ├── Statistical testing
+   └── Significance filtering
+
+4. POST-PROCESSING
+   ├── Motif clustering
+   ├── Detailed analysis
+   ├── Gene list generation
+   └── Visualization
+
+5. OUTPUT GENERATION
+   ├── CSV files
+   ├── Text reports
+   ├── Plots
+   └── Gene lists
 ```
 
-## Detailed Usage
-
-### Command Line Interface
-
-```bash
-python src/run_analysis.py [OPTIONS]
-```
-
-### Parameters
-
-#### Core Parameters
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `--max-utr-length` | 500 | Maximum 5'UTR length to analyze (nt) |
-| `--min-frequency` | 0.05 | Minimum motif frequency threshold |
-| `--fold-change` | 1.5 | Fold change threshold for enrichment |
-| `--min-occur-freq` | 0.1 | Minimum occurrence frequency |
-
-#### Motif Discovery Options
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `--max-wildcards` | 1 | Maximum IUPAC wildcards allowed |
-| `--max-mismatches` | 1 | Maximum mismatches allowed |
-| `--enable-gapped` | False | Enable gapped motif discovery |
-| `--enable-pwm` | False | Enable PWM-based analysis |
-| `--enable-structural` | False | Enable structural motif analysis |
-| `--enable-pwm-gapped` | False | Enable PWM with gaps |
-
-#### Analysis Range
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `--min-length` | 4 | Minimum motif length (bp) |
-| `--max-length` | 8 | Maximum motif length (bp) |
-
-#### Performance
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `--n-cores` | Auto | Number of CPU cores (default: all-1) |
-| `--seed` | 42 | Random seed for reproducibility |
-
-### Python API Usage
-
-```python
-from src.motif_analyzer import MotifAnalyzer
-
-# Initialize analyzer
-analyzer = MotifAnalyzer(
-    max_utr_length=500,
-    min_frequency=0.05,
-    fold_change_threshold=1.5,
-    enable_gapped=True,
-    enable_pwm=True
-)
-
-# Run analysis for specific length
-results = analyzer.analyze_single_length(
-    length=7,
-    n_cores=8,
-    max_wildcards=1
-)
-
-# Access results
-significant_motifs = results[results['Significant']]
-up_enriched = significant_motifs[significant_motifs['Enrichment'] == 'UP']
-```
-
-## Input Data Format
-
-### Required Files
-Place these files in the working directory:
-
-1. **te_up_utr.fasta** - 5'UTR sequences of translationally upregulated genes
-2. **te_down_utr.fasta** - 5'UTR sequences of translationally downregulated genes
+## Input Requirements
 
 ### FASTA Format Specification
 ```fasta
->GENE_ID | Selection: Transcript_Selection_Method | Additional_Info
+>GENE_ID | Selection: TRANSCRIPT_TYPE | Additional_Info
 ATGGCGCACGNNNNCCTGATCGATCGATCGATCGATCGATCGATCG...
 ```
 
-#### Header Components
-- **GENE_ID**: Unique gene identifier
-- **Selection**: Transcript selection method (e.g., "Longest_UTR", "Most_Abundant")
-- **Additional_Info**: Optional metadata
+**Header Components:**
+- `GENE_ID`: Unique gene identifier (required)
+- `Selection`: Transcript selection method (optional, e.g., "MANE_Select", "Longest_UTR")
+- `Additional_Info`: Any additional metadata (optional)
 
-### Example Input File
-```fasta
->ENSG00000141510 | Selection: Longest_UTR | Gene: TP53
-ATGGAGGAGCCGCAGTCAGATCCTAGCGTCGAGCCCCCTCTGAGTCAGGAA
->ENSG00000171862 | Selection: Most_Abundant | Gene: PTEN
-GCGCACGNNNCCTGATCGATCGATCGATCGATCGATCGATCGATCGATCGA
-```
+### Sequence Requirements
+- **Alphabet**: Standard nucleotides (A, C, G, T/U)
+- **Special Characters**: N for unknown bases (will be excluded from analysis)
+- **Length**: Sequences longer than `max_utr_length` will be truncated
+- **Quality**: No quality scores needed (FASTA, not FASTQ)
 
 ## Output Description
 
 ### Directory Structure
 ```
-motif_analysis_results/
-│
-├── analysis_summary.csv              # Overall summary statistics
-├── analysis_summary.png              # Summary visualization
-├── README.md                         # Auto-generated report
-│
-└── motif_results_length_N/          # Results for each length
-    ├── 01_motif_analysis.csv        # All discovered motifs
-    ├── 02_significant_motifs.csv    # Filtered significant motifs
-    ├── 03_up_enriched_motifs.csv    # UP-enriched motifs
-    ├── 03_down_enriched_motifs.csv  # DOWN-enriched motifs
-    ├── 04_up_clustered_motifs.csv   # Clustered UP motifs
-    ├── 04_down_clustered_motifs.csv # Clustered DOWN motifs
-    │
-    ├── visualizations/
-    │   ├── frequency_distribution.png
-    │   ├── enrichment_scatter.png
-    │   ├── strand_specificity.png
-    │   ├── significant_heatmap.png
-    │   └── motif_network.png
-    │
-    └── motif_details/
-        ├── up_motif_GCACGCC_frequencies.csv
-        ├── up_motif_GCACGCC_details.txt
-        └── up_motif_GCACGCC_genes.txt
+motif_results_length_N/
+├── 01motif_analysis.csv                    # All discovered motifs
+├── 02significant_motifs.csv                # Filtered significant motifs
+├── 02significant_motifs_with_details.csv   # Detailed gene information
+├── 02significant_motifs_gene_lists.csv     # Gene lists per motif
+├── 02up_enriched_motifs.csv               # UP-regulated enriched
+├── 02down_enriched_motifs.csv             # DOWN-regulated enriched
+├── 03up_clustered_motifs.csv              # Clustered UP motifs
+├── 03down_clustered_motifs.csv            # Clustered DOWN motifs
+├── 04_[direction]_clustered_motifs.csv    # Final clustered results
+├── motif_types_summary.csv                # Statistics by motif type
+├── motif_types_distribution.png           # Visualization of types
+├── 01frequency_distribution.png           # Frequency histograms
+├── 02fold_change_distribution.png         # Enrichment distribution
+├── 03enrichment_scatter.png               # Scatter plot analysis
+├── 04frequency_heatmap.png                # Heatmap of top motifs
+├── 05strand_specificity_by_direction.png  # Strand bias analysis
+├── 06motif_type_significance.png          # Significance by type
+├── [direction]_motif_[PATTERN]_details.txt     # Detailed report
+├── [direction]_motif_[PATTERN]_frequencies.csv # Position frequencies
+├── [direction]_motif_[PATTERN]_genes.txt       # Gene list
+└── transcript_type_analysis/              # MANE selection analysis
 ```
 
-### Output File Descriptions
+### Key Output Files
 
-#### 1. Summary Files
-- **analysis_summary.csv**: Overview of all analyzed lengths
-- **README.md**: Detailed analysis report with key findings
+#### `01motif_analysis.csv`
+Complete list of all discovered motifs with full statistics.
 
-#### 2. Motif Analysis Files
-- **01_motif_analysis.csv**: Complete list of discovered motifs with statistics
-- **02_significant_motifs.csv**: Motifs passing significance thresholds
-- **03_*_enriched_motifs.csv**: Direction-specific enriched motifs
-- **04_*_clustered_motifs.csv**: Similar motifs grouped together
+**Columns:**
+- `Pattern`: Motif sequence or pattern
+- `Length`: Motif length
+- `Type`: Discovery method (exact/mismatch/gapped/pwm)
+- `UP_present`: Count in upregulated genes
+- `DOWN_present`: Count in downregulated genes
+- `UP_frequency`: Frequency in UP set
+- `DOWN_frequency`: Frequency in DOWN set
+- `UP_to_DOWN_ratio`: Enrichment ratio
+- `P_value`: Fisher's exact test p-value
+- `Odds_ratio`: Statistical odds ratio
+- `Strand_specificity`: Forward/reverse strand ratio
+- `Strand_pvalue`: Strand bias significance
+- `Significant`: Boolean significance flag
+- `Enrichment`: Direction (UP/DOWN/None)
 
-#### 3. Detailed Analysis Files
-- **frequencies.csv**: Position-specific nucleotide frequencies
-- **details.txt**: Comprehensive motif statistics
-- **genes.txt**: List of genes containing the motif
+#### `02significant_motifs.csv`
+Filtered motifs meeting significance criteria.
 
-### Output Data Fields
+**Significance Criteria:**
+- Frequency ≥ `min_occur_freq`
+- Fold change ≥ `fold_change_threshold`
+- Present in multiple genes
 
-#### Main Analysis CSV
-| Column | Description |
-|--------|-------------|
-| Pattern | Motif sequence or pattern |
-| Type | Motif type (exact/mismatch/gapped/pwm) |
-| UP_present | Count in upregulated genes |
-| DOWN_present | Count in downregulated genes |
-| UP_frequency | Frequency in upregulated set |
-| DOWN_frequency | Frequency in downregulated set |
-| UP_to_DOWN_ratio | Enrichment ratio |
-| Strand_specificity | Strand bias score |
-| Strand_pvalue | Statistical significance |
-| Significant | Boolean significance flag |
-| Enrichment | Direction of enrichment |
+#### Gene Lists (`*_genes.txt`)
+Plain text files with one gene ID per line, suitable for:
+- Gene Ontology (GO) enrichment analysis
+- KEGG pathway analysis
+- Integration with other tools
 
-## Algorithm Details
+## Parameter Configuration
 
-### Motif Discovery Methods
-
-#### 1. Exact K-mer Matching
+### Core Parameters
 ```python
-# Traditional k-mer counting
-for i in range(len(sequence) - k + 1):
-    kmer = sequence[i:i+k]
-    count[kmer] += 1
+# In main() function of sequence-analysis.py
+
+# Sequence processing
+max_utr_length = 500        # Maximum 5'UTR length in nucleotides
+                           # Longer sequences will be truncated
+
+# Frequency thresholds
+min_frequency = 0.05        # Initial filtering (5% of sequences)
+                           # Used during motif discovery phase
+
+min_occur_freq = 0.1       # Final significance threshold (10%)
+                           # Used for determining significant motifs
+
+# Enrichment criteria
+fold_change_threshold = 1.5 # Minimum enrichment ratio
+                           # UP/DOWN or DOWN/UP ratio
+
+# Motif discovery options
+max_wildcards = 1          # Maximum IUPAC wildcards per motif
+                          # Higher values increase search space
+
+max_mismatches = 1        # Maximum allowed mismatches
+                         # For approximate matching
+
+# Advanced features
+enable_gapped = True      # Enable gapped motif discovery
+                         # Finds patterns like GCACG{2,4}CC
+
+enable_pwm = True        # Enable Position Weight Matrix
+                        # For probabilistic matching
+
+enable_structural = False # Enable RNA structure analysis
+                        # Requires ViennaRNA package
+
+# Performance
+n_cores = None           # Number of CPU cores (None = auto-detect)
 ```
 
-#### 2. IUPAC Wildcard Support
+### Length Range
 ```python
-IUPAC_MAP = {
-    'R': ['A', 'G'],  # puRine
-    'Y': ['C', 'T'],  # pYrimidine
-    'M': ['A', 'C'],  # aMino
-    'K': ['G', 'T'],  # Keto
-    'S': ['G', 'C'],  # Strong
-    'W': ['A', 'T'],  # Weak
-    'N': ['A', 'C', 'G', 'T']  # aNy
-}
+# Analyze motifs from 4 to 8 nucleotides
+for length in range(4, 9):
+    analyzer.analyze_single_length(length)
 ```
 
-#### 3. Gapped Motif Discovery
+## Example Usage
+
+### Basic Usage
 ```python
-# Format: PREFIX{min,max}SUFFIX
-# Example: GCACG{2,4}CC matches:
-#   GCACGNNCC (gap=2)
-#   GCACGNNNCC (gap=3)
-#   GCACGNNNNCC (gap=4)
+# Default parameters
+analyzer = MotifAnalyzer()
+
+# Analyze all lengths
+for length in range(4, 9):
+    results = analyzer.analyze_single_length(length)
 ```
 
-#### 4. Position Weight Matrix (PWM)
+### Custom Parameters
 ```python
-# PWM scoring for sequence matching
-def calculate_pwm_score(pwm, sequence):
-    score = 0
-    for i, base in enumerate(sequence):
-        score += pwm[base][i]
-    return score
+# More stringent analysis
+analyzer = MotifAnalyzer(
+    max_utr_length=1000,      # Analyze longer UTRs
+    min_frequency=0.02,       # More sensitive
+    fold_change_threshold=2.0, # Stricter enrichment
+    min_occur_freq=0.15,      # Higher significance threshold
+    max_mismatches=2,         # Allow more mismatches
+    enable_gapped=True,
+    enable_pwm=True,
+    enable_structural=True    # Include structure analysis
+)
 ```
 
-### Statistical Methods
-
-#### Enrichment Calculation
+### Parallel Processing
 ```python
-enrichment_ratio = (up_frequency / down_frequency)
-significance = fisher_exact_test(contingency_table)
+# Specify CPU cores for large datasets
+results = analyzer.analyze_single_length(
+    length=7,
+    n_cores=16,  # Use 16 cores
+    max_wildcards=2  # More wildcards for deeper search
+)
 ```
 
-#### Strand Specificity
+### Accessing Results Programmatically
 ```python
-forward_matches = count_matches(motif, sequences)
-reverse_matches = count_matches(reverse_complement(motif), sequences)
-specificity = forward_matches / reverse_matches
+# Load and filter results
+import pandas as pd
+
+# Read significant motifs
+sig_motifs = pd.read_csv('motif_results_length_7/02significant_motifs.csv')
+
+# Filter for highly enriched motifs
+highly_enriched = sig_motifs[sig_motifs['UP_to_DOWN_ratio'] > 3]
+
+# Get DOWN-enriched motifs
+down_enriched = sig_motifs[sig_motifs['Enrichment'] == 'DOWN']
+
+# Extract gene lists
+up_genes = set()
+for _, row in sig_motifs.iterrows():
+    if row['Enrichment'] == 'UP':
+        genes = row['UP_genes'].split(',')
+        up_genes.update(genes)
 ```
-
-## Example Analysis
-
-### Sample Run Output
-```
-Starting METTL5 motif analysis pipeline
-Parameters: {'max_utr_length': 500, 'min_frequency': 0.05, ...}
-
-Analyzing motifs of length 6
-Found 127 significant motifs
-  UP-enriched: 45
-  DOWN-enriched: 82
-
-Analyzing motifs of length 7
-Found 156 significant motifs
-  UP-enriched: 52
-  DOWN-enriched: 104
-
-Top discovered motif: GCACGN{2,4}CC
-  - Enrichment: 2.8-fold in DOWN-regulated genes
-  - Frequency: 15.3% of target genes
-  - Strand specificity: 3.2 (p < 0.001)
-  - Genes affected: 147
-
-Analysis complete!
-Results saved in motif_analysis_results/
-```
-
-### Biological Validation Results
-The discovered GCACGN{2,4}CC motif has been validated through:
-- Dual-luciferase reporter assays
-- Mutation analysis
-- Polysome profiling
-- Clinical sample validation
 
 ## Troubleshooting
 
 ### Common Issues and Solutions
 
-#### Issue 1: Memory Error
-```
-MemoryError: Unable to allocate array
-```
-**Solution**: Reduce `--max-utr-length` or process in batches
+#### 1. Memory Error
+**Problem:** `MemoryError: Unable to allocate array`
 
-#### Issue 2: No Significant Motifs Found
-```
-WARNING: No significant motifs identified
-```
-**Solution**: Adjust parameters:
-- Decrease `--min-frequency`
-- Decrease `--fold-change`
-- Enable `--enable-gapped` and `--enable-pwm`
+**Solutions:**
+- Reduce `max_utr_length` parameter
+- Process lengths sequentially rather than in parallel
+- Use fewer CPU cores to reduce memory overhead
+- Split input files into smaller batches
 
-#### Issue 3: Slow Performance
-```
-Processing taking too long
-```
-**Solution**: 
-- Increase `--n-cores`
+#### 2. No Significant Motifs Found
+**Problem:** No motifs pass significance thresholds
+
+**Solutions:**
+- Decrease `min_frequency` (e.g., 0.02)
+- Decrease `fold_change_threshold` (e.g., 1.2)
+- Decrease `min_occur_freq` (e.g., 0.05)
+- Enable more discovery methods (`enable_gapped`, `enable_pwm`)
+- Check input file quality and sequence diversity
+
+#### 3. Slow Performance
+**Problem:** Analysis takes too long
+
+**Solutions:**
+- Increase `n_cores` parameter
 - Reduce motif length range
 - Disable structural analysis if not needed
+- Use SSD for faster I/O
+- Consider cloud computing for large datasets
 
-### FAQ
+#### 4. RNA Package Import Error
+**Problem:** `ImportError: No module named 'RNA'`
 
-**Q: Can I use this for other organisms?**
-A: Yes, the pipeline is organism-agnostic. Just provide appropriate FASTA files.
+**Solutions:**
+```bash
+# Install ViennaRNA
+conda install -c bioconda viennarna
+# or
+pip install ViennaRNA
 
-**Q: What if I don't have UP/DOWN regulated gene sets?**
-A: You can compare any two gene sets (e.g., treated vs control).
+# If still not working, disable structural analysis:
+enable_structural = False
+```
 
-**Q: How do I interpret strand specificity?**
-A: 
-- Ratio ≈ 1: No strand preference (DNA-level)
-- Ratio > 2: Strong strand preference (RNA-level)
+#### 5. Empty Output Files
+**Problem:** Output files are created but empty
+
+**Solutions:**
+- Check input FASTA format
+- Verify sequence quality (no invalid characters)
+- Ensure sequences are DNA (ACGT), not protein
+- Check file permissions in output directory
+
+## Performance Considerations
+
+### Computational Complexity
+- **Time Complexity:** O(n × m × k) where:
+  - n = number of sequences
+  - m = average sequence length
+  - k = motif length
+- **Space Complexity:** O(n × 4^k) for storing all k-mers
+
+### Optimization Tips
+
+#### For Large Datasets (>10,000 sequences)
+```python
+# Use aggressive filtering
+min_frequency = 0.1  # Higher threshold
+max_wildcards = 0    # No wildcards initially
+enable_structural = False  # Disable structure
+
+# Process in batches
+chunk_size = 1000
+for i in range(0, len(sequences), chunk_size):
+    chunk = sequences[i:i+chunk_size]
+    # Process chunk
+```
+
+#### For Deep Analysis (High Sensitivity)
+```python
+# Comprehensive search
+min_frequency = 0.01  # Very low threshold
+max_wildcards = 2     # More wildcards
+max_mismatches = 2    # More mismatches
+enable_gapped = True
+enable_pwm = True
+enable_structural = True
+```
+
+### Memory Requirements
+
+| Dataset Size | Memory Usage | Recommended RAM |
+|-------------|--------------|-----------------|
+| 100 genes | ~500 MB | 4 GB |
+| 1,000 genes | ~2 GB | 8 GB |
+| 10,000 genes | ~8 GB | 16 GB |
+| 50,000 genes | ~32 GB | 64 GB |
+
+### Processing Time Estimates
+
+| Dataset | Length Range | CPU Cores | Estimated Time |
+|---------|-------------|-----------|----------------|
+| 1,000 genes | 4-8 bp | 4 | 5-10 minutes |
+| 10,000 genes | 4-8 bp | 8 | 30-60 minutes |
+| 50,000 genes | 4-8 bp | 16 | 2-4 hours |
+
+## Advanced Features
+
+### Custom Motif Patterns
+
+#### IUPAC Wildcards
+```python
+# Supported IUPAC codes
+wildcards = {
+    'R': ['A', 'G'],      # puRine
+    'Y': ['C', 'T'],      # pYrimidine
+    'M': ['A', 'C'],      # aMino
+    'K': ['G', 'T'],      # Keto
+    'S': ['G', 'C'],      # Strong
+    'W': ['A', 'T'],      # Weak
+    'H': ['A', 'C', 'T'], # not G
+    'B': ['C', 'G', 'T'], # not A
+    'V': ['A', 'C', 'G'], # not T
+    'D': ['A', 'G', 'T'], # not C
+    'N': ['A', 'C', 'G', 'T'] # aNy
+}
+```
+
+#### Gap Patterns
+```python
+# Format: PREFIX{min,max}SUFFIX
+# Examples:
+"GCACG{2,4}CC"    # 2-4 nucleotides between GCACG and CC
+"ATG{1,3}TAA"     # 1-3 nucleotides between ATG and TAA
+"GGG{3,5}CCC"     # 3-5 nucleotides between GGG and CCC
+```
+
+#### PWM Patterns
+```python
+# Format: PWM:BASE_PATTERN
+# Example: "PWM:GCACGCC"
+# Creates position weight matrix from GCACGCC matches
+# Then uses probabilistic scoring for flexible matching
+```
+
+### Integration with Other Tools
+
+#### Export for MEME Suite
+```python
+# Convert to MEME format
+def to_meme_format(motifs_df, output_file):
+    with open(output_file, 'w') as f:
+        f.write("MEME version 4\n\n")
+        f.write("ALPHABET= ACGT\n\n")
+        # Add motif data...
+```
+
+#### Export for HOMER
+```python
+# Create HOMER motif file
+def to_homer_format(motifs_df, output_file):
+    with open(output_file, 'w') as f:
+        for _, motif in motifs_df.iterrows():
+            f.write(f">{motif['Pattern']}\t{motif['P_value']}\n")
+            # Add frequency matrix...
+```
+
+## Validation Methods
+
+### Experimental Validation Suggestions
+
+1. **Luciferase Reporter Assays**
+   - Clone 5'UTRs with/without motifs
+   - Measure translation efficiency
+
+2. **Ribosome Profiling**
+   - Validate translation changes
+   - Confirm ribosome occupancy
+
+3. **CLIP-seq**
+   - Identify RNA-binding proteins
+   - Validate protein-motif interactions
+
+4. **Mutation Analysis**
+   - Mutate key motif positions
+   - Measure functional impact
+
+## Future Developments
+
+### Planned Features
+- [ ] Machine learning-based motif scoring
+- [ ] Integration with RNA-seq data
+- [ ] Web interface for easy access
+- [ ] Docker containerization
+- [ ] Cloud deployment options
+- [ ] Real-time analysis updates
+- [ ] Interactive visualization dashboard
+
+### Contributing
+We welcome contributions! Please submit pull requests or open issues for:
+- Bug fixes
+- New features
+- Documentation improvements
+- Performance optimizations
 
 ## Citation
 
-This code is associated with a manuscript currently under preparation. Please check back for citation information once published.
+If you use this pipeline in your research, please cite:
 
-## Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/NewFeature`)
-3. Commit changes (`git commit -m 'Add NewFeature'`)
-4. Push to branch (`git push origin feature/NewFeature`)
-5. Open a Pull Request
+```bibtex
+@article{yang2025mettl5,
+  title={METTL5-mediated 18S rRNA methylation controls mRNA translation through 5'UTR regulatory motifs},
+  author={Yang, Ruifeng and others},
+  journal={Journal Name},
+  year={2025},
+  note={Manuscript in preparation}
+}
+```
 
 ## Contact
 
-**Principal Investigator**
-- Name: Ruifeng Yang
-- Email: yangrf1996@163.com
+**Developer:** Ruifeng Yang  
+**Email:** yangrf1996@163.com  
+**Institution:** Department of Urology, Fudan University Shanghai Cancer Center, Fudan University, Shanghai, China.; The Core Laboratory in Medical Center of Clinical Research, Shanghai Ninth People’s Hospital, State Key Laboratory of Medical Genomics, Shanghai Jiao Tong University School of Medicine, Shanghai, China.  
 
-**Technical Support**
-- GitHub Issues: [Create Issue](https://github.com/yangrf2021/5-UTR-Regulatory-Motifs-Discovery/issues)
-- Email: yangrf1996@163.com
+For questions, bug reports, or collaborations, please:
+1. Open an issue on GitHub
+2. Email the developer directly
+3. Check the FAQ section
 
 ## License
 
-This project is licensed under the MIT License:
-
-```
-MIT License
-
-Copyright (c) 2025 Ruifeng Yang
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
-- Thanks to all contributors and collaborators
-- Computational resources provided by Shanghai Ninth People's Hospital
-- Supported by grants: No. 82473192, 82172741
-- Special thanks to the Bioinformatics Core Facility
-
-## Disclaimer
-
-This software is provided for research purposes only. Any clinical or diagnostic use requires additional validation and regulatory approval.
-
-## Performance Metrics
-
-| Dataset Size | Runtime | Memory Usage | CPU Cores |
-|-------------|---------|--------------|-----------|
-| 100 genes | 2 min | 1 GB | 4 |
-| 1,000 genes | 15 min | 4 GB | 8 |
-| 10,000 genes | 2 hours | 16 GB | 16 |
-
-## Version History
-
-- **v1.0.0** (2023-06): Initial release
-  - Core motif discovery algorithms
-  - Statistical analysis framework
-  - Visualization suite
-  
-- **v0.9.0** (2022-12): Beta version
-  - PWM implementation
-  - Gapped motif support
-
-## TODO
-
-- [ ] Add RNA secondary structure prediction
-- [ ] Implement machine learning-based motif scoring
-- [ ] Add support for paired-end RNA-seq data
-- [ ] Create web interface
-- [ ] Add Docker container support
+- National Natural Science Foundation of China (Grant No. 82473192, 82172741)
+- Fudan University Shanghai Cancer Center
+- Shanghai Ninth People's Hospital
+- All contributors and collaborators
+- Open-source community for tools and libraries
 
 ---
 
-**Last Updated**: January 2025  
-**Version**: 1.0.0  
-**Status**: Active Development
-
-[![Made with Python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/yangrf2021/5-UTR-Regulatory-Motifs-Discovery/graphs/commit-activity)
+**Last Updated:** January 2025  
+**Version:** 1.0.0  
+**Status:** Active Development
