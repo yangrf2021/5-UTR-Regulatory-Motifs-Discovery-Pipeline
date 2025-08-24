@@ -697,17 +697,7 @@ We welcome contributions! Please submit pull requests or open issues for:
 
 ## Citation
 
-If you use this pipeline in your research, please cite:
-
-```bibtex
-@article{yang2025mettl5,
-  title={METTL5-mediated 18S rRNA methylation controls mRNA translation through 5'UTR regulatory motifs},
-  author={Yang, Ruifeng and others},
-  journal={Journal Name},
-  year={2025},
-  note={Manuscript in preparation}
-}
-```
+This code is associated with a manuscript currently under preparation. Please check back for citation information once published.
 
 ## Contact
 
